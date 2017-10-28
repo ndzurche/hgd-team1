@@ -82,7 +82,7 @@ public class MobileInput : MonoBehaviour {
             }
 
             //Let's check with standalone / PC
-            else if(Input.GetMouseButtonDown(0))
+            else if(Input.GetMouseButton(0))
             {
                 swipeDelta = (Vector2) Input.mousePosition - startTouch;
             }
