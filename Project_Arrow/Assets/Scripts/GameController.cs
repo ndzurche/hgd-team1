@@ -18,31 +18,52 @@ public class GameController : MonoBehaviour
 
     public Text gameOverText;
     public Text restartText;
+	public Text scoreText;
+
+	public int score;
+	public int timer;
 
     private bool gameOver;
     private bool restart;
+	private bool scoreCheck;
      
     private void Start()
     {
         gameOver = false;
         restart = false;
+
         gameOverText.text = "";
         restartText.text = ""; 
+
         StartCoroutine(SpawnArrows());
+
+		score = 0;
+		UpdateScore ();
     }
 
     private void Update()
     {
+		//updates the score when not currently checking the score
+		if (scoreCheck == false && gameOver == false)
+		{
+			StartCoroutine (ScoreDelay ());
+			UpdateScore ();
+		}
+
+
         //allows the player to restart by pressing the 'R' key after game over
         if (restart)
         {
-			if (MobileInput.Instance.SwipeUp)
+            if (Input.GetKeyDown(KeyCode.R))
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             }
         }
 
+
     }
+
+
 
     //called when the player is destroyed, ending the game
     public void GameOver()
@@ -50,6 +71,16 @@ public class GameController : MonoBehaviour
         gameOverText.text = "Game Over";
         gameOver = true;
     }
+
+	//updates the score over time
+	IEnumerator ScoreDelay()
+	{
+		scoreCheck = true;
+		score++;
+		yield return new WaitForSeconds (0.2f);
+		scoreCheck = false;
+	}
+
 
 
     IEnumerator SpawnArrows()
@@ -100,4 +131,11 @@ public class GameController : MonoBehaviour
             }
         }
     }
+
+	void UpdateScore ()
+	{
+		scoreText.text = "Score: " + score;
+		return;
+	}
+			
 }
